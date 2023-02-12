@@ -1,0 +1,74 @@
+1. Управление пользователями:
+а) создать нового пользователя;
+    student@Ubuntu-MySQL-VirtualBox:~$ sudo useradd -s /bin/bash -m -d /home/user1 user1
+
+    student@Ubuntu-MySQL-VirtualBox:~$ sudo passwd user1
+        Введите новый пароль UNIX:
+        Повторите ввод нового пароля UNIX:
+        passwd: пароль успешно обновлён
+
+б) убедиться, что информация о нем появилась в соответствующих файлах в системе;
+    student@Ubuntu-MySQL-VirtualBox:~$ ls /home
+        student  user1
+
+    student@Ubuntu-MySQL-VirtualBox:~$ more /etc/passwd
+        ...
+        user1:x:1001:1001::/home/user1:/bin/bash
+
+
+с) удалить созданного пользователя;
+    student@Ubuntu-MySQL-VirtualBox:~$ sudo userdel user1 -r -f
+        userdel: user user1 is currently used by process 2217
+        userdel: почтовый ящик user1 (/var/mail/user1) не найден
+
+    student@Ubuntu-MySQL-VirtualBox:~$ ls /home
+        student
+
+2. Управление группами:
+а) создать группу;
+    student@Ubuntu-MySQL-VirtualBox:~$ sudo groupadd team1
+
+    student@Ubuntu-MySQL-VirtualBox:~$ tail /etc/group
+        ...
+        team1:x:1001:
+
+б) попрактиковаться в смене групп у пользователей;
+    student@Ubuntu-MySQL-VirtualBox:~$ sudo usermod -g main_group user1
+    student@Ubuntu-MySQL-VirtualBox:~$ groups user1
+        user1 : main_group team1
+
+с) добавить пользователя в группу, не меняя основной;
+    student@Ubuntu-MySQL-VirtualBox:~$ sudo usermod -a -G team1 user1
+
+    student@Ubuntu-MySQL-VirtualBox:~$ groups user1
+        user1 : user1 team1
+
+д) удалить пользователя из группы.
+    student@Ubuntu-MySQL-VirtualBox:~$ sudo deluser user1 team1
+        Удаляется пользователь «user1» из группы «team1» ...
+        Готово.
+    student@Ubuntu-MySQL-VirtualBox:~$ groups user1
+        user1 : main_group
+
+
+3. Создать пользователя с правами суперпользователя. Проверить результат.
+    student@Ubuntu-MySQL-VirtualBox:~$ sudo usermod -aG sudo superuser
+    student@Ubuntu-MySQL-VirtualBox:~$ groups superuser
+        superuser : superuser sudo
+    student@Ubuntu-MySQL-VirtualBox:~$ su superuser
+        Пароль:
+        To run a command as administrator (user "root"), use "sudo <command>".
+        See "man sudo_root" for details.
+
+    superuser@Ubuntu-MySQL-VirtualBox:/home/student$ sudo apt update
+        [sudo] пароль для superuser:
+        ...
+        Получено 1 161 kB за 4с (256 kB/s)
+        Чтение списков пакетов… Готово
+        Построение дерева зависимостей
+        Чтение информации о состоянии… Готово
+        Может быть обновлено 4 пакета. Запустите «apt list --upgradable» для их показа.
+
+
+4. * Используя дополнительные материалы, выдать одному из созданных пользователей
+право на выполнение ряда команд, требующих прав суперпользователя (команды выбираем на своё усмотрение).

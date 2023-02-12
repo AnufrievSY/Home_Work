@@ -1,0 +1,106 @@
+1. Потоки ввода/вывода.
+Создать файл, используя команду echo.
+
+    studentnt@Ubuntu-MySQL-VirtualBox:~$ echo text.txt
+        text.txt
+    student@Ubuntu-MySQL-VirtualBox:~$ ls
+        examples.desktop  test.txt  Видео  Документы  Загрузки  Изображения  Музыка  Общедоступные  Рабочий стол  Шаблоны
+
+Используя команду cat, прочитать содержимое всех файлов каталога etc, ошибки перенаправить в отдельный файл.
+
+    student@Ubuntu-MySQL-VirtualBox:~$ cat /etc/* 2> test.txt
+    student@Ubuntu-MySQL-VirtualBox:~$ cat test.txt
+        cat: /etc/acpi: Это каталог
+        cat: /etc/alternatives: Это каталог
+        ...
+        cat: /etc/xdg: Это каталог
+        cat: /etc/xml: Это каталог
+
+2. Конвейер (pipeline).
+Использовать команду cut на вывод длинного списка каталога, чтобы отобразить только права доступа к файлам.
+
+    student@Ubuntu-MySQL-VirtualBox:~$ ls -l | cut -b -10
+        итого
+        -rw-r--r--
+        -rw-rw-r--
+        drwxr-xr-x
+        drwxr-xr-x
+        drwxr-xr-x
+        drwxr-xr-x
+        drwxr-xr-x
+        drwxr-xr-x
+        drwxr-xr-x
+        drwxr-xr-x
+
+Затем отправить в конвейере этот вывод на sort и uniq, чтобы отфильтровать все повторяющиеся строки.
+
+    student@Ubuntu-MySQL-VirtualBox:~$ ls -l | cut -b -10 | sort | uniq
+        drwxr-xr-x
+        -rw-r--r--
+        -rw-rw-r--
+        итого
+
+
+3. Управление процессами.
+Изменить конфигурационный файл службы SSH: /etc/ssh/sshd_config, отключив аутентификацию по паролю
+PasswordAuthentication no.
+    student@Ubuntu-MySQL-VirtualBox:~$ sudo nano /etc/ssh/sshd_config
+        [sudo] пароль для student:
+    Находим строчку #PasswordAuthentication yes.
+    Меняем на #PasswordAuthentication no.
+    Сохраняем изменение
+
+Выполните рестарт службы systemctl restart sshd (service sshd restart),
+    student@Ubuntu-MySQL-VirtualBox:~$systemctl restart sshd
+        === AUTHENTICATING FOR org.freedesktop.systemd1.manage-units ===
+        Чтобы перезапустить «ssh.service», необходимо пройти аутентификацию.
+        Multiple identities can be used for authentication:
+         1.  student,,, (student)
+         2.  ,,, (superuser)
+        Choose identity to authenticate as (1-2): 1
+        Password:
+        ==== AUTHENTICATION COMPLETE ===
+
+верните аутентификацию по паролю, выполните reload службы systemctl reload sshd (services sshd reload).
+    student@Ubuntu-MySQL-VirtualBox:~$ systemctl reload sshd
+        ==== AUTHENTICATING FOR org.freedesktop.systemd1.manage-units ===
+        Чтобы заставить «ssh.service» перечитать конфигурацию, необходимо пройти аутентификацию.
+        Multiple identities can be used for authentication:
+         1.  student,,, (student)
+         2.  ,,, (superuser)
+        Choose identity to authenticate as (1-2): 1
+        Password:
+        ==== AUTHENTICATION COMPLETE ===
+
+В чём различие между действиями restart и reload?
+
+    Если restart полностью останавливает приложение и запускает его заново, то reload просто
+    позволяет приложению перечитать конфигурационный файл, с которым оно работает, без полного перезапуска.
+
+Создайте файл при помощи команды cat > file_name, напишите текст и завершите комбинацией ctrl+d.
+
+    student@Ubuntu-MySQL-VirtualBox:~$ cat > test_2.txt
+        row1
+        row2
+        row3^d
+    student@Ubuntu-MySQL-VirtualBox:~$ cat test_2.txt
+        row1
+        row2
+        row3
+
+Какой сигнал передадим процессу?
+    Завершения ввода.
+
+4. Сигналы процессам.
+Запустите mc.
+    student@Ubuntu-MySQL-VirtualBox:~$ mc
+
+Используя ps, найдите PID процесса,
+    student@Ubuntu-MySQL-VirtualBox:~$ ps aux | grep mc
+    Нажимаем ^O чтобы посмотреть результат:
+        student  25074  0.0  0.4  63780  8752 pts/4    S+   08:47   0:00 mc
+        student  25091  0.0  0.0  15472  1084 pts/11   S+   08:49   0:00 grep --color=auto mc
+
+Завершите процесс, передав ему сигнал 9.
+    student@Ubuntu-MySQL-VirtualBox:~$ kill 9 25225
+    student@Ubuntu-MySQL-VirtualBox:~$ Завершено
