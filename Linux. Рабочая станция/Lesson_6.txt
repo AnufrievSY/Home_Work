@@ -1,0 +1,38 @@
+1.  Вывести на экран 3 раза имя пользователя, от которого запускается команда.
+
+    student@Ubuntu-MySQL-VirtualBox:~$ cat > task_1.sh
+    for i in {0, 1, 2}
+        do
+            echo $USER
+        done
+
+    student@Ubuntu-MySQL-VirtualBox:~$ bash task_1.sh
+    student
+    student
+    student
+
+2.  Вывести с помощью цикла while все четные числа от 0 до 100 включительно.
+
+    student@Ubuntu-MySQL-VirtualBox:~$ cat > task_2.sh
+    x=0
+    while [ $x != 102 ]
+    do
+        echo $x
+        x=$(( $x + 2 ))
+    done
+
+    student@Ubuntu-MySQL-VirtualBox:~$ bash task_2.sh
+    0
+    2
+    ...
+    98
+    100
+
+3.  Создать с помощью nano файл test.txt. Настроить автоматический бэкап этого файла раз в 10 минут в файл с
+    названием test.txt.bak с использованием cron.
+
+    student@Ubuntu-MySQL-VirtualBox:~$ nano test.txt
+
+    student@Ubuntu-MySQL-VirtualBox:~$ crontab -e
+    */10 * * * * cat /home/student/test.txt > /home/student/test.txt.bak
+
