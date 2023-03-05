@@ -1,0 +1,68 @@
+student@Ubuntu-MySQL-VirtualBox:~$ sudo apt-get update
+	...
+	Чтение списков пакетов… Готово
+
+student@Ubuntu-MySQL-VirtualBox:~$ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+	OK
+
+student@Ubuntu-MySQL-VirtualBox:~$ sudo apt install udo
+	...
+	Обновлено 0 пакетов, установлено 1 новых пакетов, для удаления отмечено 0 пакетов, и 4 пакетов не обновлено.
+	...
+
+student@Ubuntu-MySQL-VirtualBox:~$ sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+
+student@Ubuntu-MySQL-VirtualBox:~$ sudo apt-get update
+student@Ubuntu-MySQL-VirtualBox:~$ sudo apt-get install docker-ce docker-ce-cli containerd.i
+	...
+	Обновлено 0 пакетов, установлено 9 новых пакетов, для удаления отмечено 0 пакетов, и 4 пакетов не обновлено.
+	...
+student@Ubuntu-MySQL-VirtualBox:~$ sudo docker version
+	Client: Docker Engine - Community
+	 Version:           20.10.7
+	 API version:       1.41
+	 Go version:        go1.13.15
+	 Git commit:        f0df350
+	 Built:             Wed Jun  2 11:56:47 2021
+	 OS/Arch:           linux/amd64
+	 Context:           default
+	 Experimental:      true
+
+	Server: Docker Engine - Community
+	 Engine:
+	  Version:          20.10.7
+	  API version:      1.41 (minimum version 1.12)
+	  Go version:       go1.13.15
+	  Git commit:       b0f5bc3
+	  Built:            Wed Jun  2 11:54:58 2021
+	  OS/Arch:          linux/amd64
+	  Experimental:     false
+	 containerd:
+	  Version:          1.4.6
+	  GitCommit:        d71fcd7d8303cbf684402823e425e9dd2e99285d
+	 runc:
+	  Version:          1.0.0-rc95
+	  GitCommit:        b9ee9c6314599f1b4a7f497e1f1f856fe433d3b7
+	 docker-init:
+	  Version:          0.19.0
+	  GitCommit:        de40ad0
+
+student@Ubuntu-MySQL-VirtualBox:~$ sudo docker pull centos
+	Using default tag: latest
+	latest: Pulling from library/centos
+	a1d0c7532777: Pull complete
+	Digest: sha256:a27fd8080b517143cbbbab9dfb7c8571c40d67d534bbdee55bd6c473f432b177
+	Status: Downloaded newer image for centos:latest
+	docker.io/library/centos:latest
+
+student@Ubuntu-MySQL-VirtualBox:~$ sudo docker images
+	REPOSITORY    TAG       IMAGE ID       CREATED         SIZE
+	hello-world   latest    feb5d9fea6a5   17 months ago   13.3kB
+	centos        latest    5d0da3dc9764   17 months ago   231MB
+
+student@Ubuntu-MySQL-VirtualBox:~$ sudo docker ps -l
+	CONTAINER ID   IMAGE     COMMAND            CREATED         STATUS                     PORTS     NAMES
+	2ce1c5fd228a   centos    "cat /etc/issue"   5 minutes ago   Exited (0) 4 minutes ago             brave_neumann
+student@Ubuntu-MySQL-VirtualBox:~$ sudo docker start 2ce1c5fd228a
+student@Ubuntu-MySQL-VirtualBox:~$ sudo docker stop 2ce1c5fd228a
+
